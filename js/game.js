@@ -41,10 +41,10 @@ function cGame() {
     this.render = function() {
         gfx.clearRect(0, 0, canvas.width, canvas.height);
         gfx.beginPath();
-        	this.player.render(gfx);
+            this.player.render(gfx);
     	gfx.closePath();
     }
-}
+} //cGame
 
 function cPlayer() {
     var _this = this;
@@ -54,6 +54,11 @@ function cPlayer() {
         this.y = 100;
         this.jump = false;
         this.gravity = 1;
+
+        this.sprite = new Image();
+        this.sprite.src = "res/player.png";
+
+        this.imageAngle = 0;
 
         window.onmousedown = function(e) {
             if(e.button == 0) {
@@ -76,15 +81,16 @@ function cPlayer() {
         this.y+= this.gravity;
 
         if(this.jump) {
-            console.log("YOU ARE JUMPING!!!");
             this.gravity = -6;
             this.jump = false;
         }
     }
 
     this.render = function(gfx) {
-        gfx.arc(this.x, this.y, 32, 0, Math.PI * 2);
-        gfx.fillStyle = "#FF0";
-        gfx.fill();
+        gfx.save();
+        gfx.translate(this.x, this.y);
+        gfx.rotate(this.imageAngle * Math.PI / 180);
+        gfx.drawImage(this.sprite, -this.sprite.width /2 , -this.sprite.height / 2);
+        gfx.restore();
     }
-}
+} //cPlayer
