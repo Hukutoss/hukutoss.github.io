@@ -80,9 +80,20 @@ function cPlayer() {
         this.gravity += 0.3;
         this.y+= this.gravity;
 
+        this.imageAngle += 2.5;
+        if (this.imageAngle > 60) {
+            this.imageAngle = 60;
+        }
+        if (this.imageAngle < -60) {
+            this.imageAngle = -60;
+        }
+
         if(this.jump) {
-            this.gravity = -6;
+            this.gravity = -5.5; //TODO: rebalancе
             this.jump = false;
+
+            this.angle = 70 + (this.imageAngle - 10)
+            this.imageAngle -= this.angle;
         }
     }
 
