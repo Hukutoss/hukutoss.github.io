@@ -18,7 +18,8 @@ var gfx = canvas.getContext("2d");
 var player = {
     x: 100,
     y: 100,
-    score: 0
+    jumping: false,
+    score: 0,
 }
 
 function init() {
@@ -26,6 +27,21 @@ function init() {
     canvas.height = 480;
 
     console.log("Hello world!");
+
+    window.onmousedown = function(e) {
+        if(e.button == 0) {
+            player.jumping = true;
+        }
+    }
+
+    document.addEventListener("keydown", function(e) {
+        switch(e.keyCode) {
+            case 32: //SPACE
+            case 38:  //UP
+                player.jumping = true;
+                break;
+        }
+    });
 
     gameLoop();
 }
@@ -39,6 +55,11 @@ function gameLoop() {
 
 function update() {
     player.y+= 1;
+
+    if(player.jumping) {
+        console.log("YOU ARE JUMPING!!!");
+        player.jumping = false;
+    }
 }
 
 function render() {
