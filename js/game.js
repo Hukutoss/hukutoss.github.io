@@ -20,6 +20,7 @@ var player = {
     y: 100,
     jumping: false,
     score: 0,
+    gravity: 1,
 }
 
 function init() {
@@ -54,10 +55,12 @@ function gameLoop() {
 }
 
 function update() {
-    player.y+= 1;
+    player.gravity += 0.4;
+    player.y+= player.gravity;
 
     if(player.jumping) {
         console.log("YOU ARE JUMPING!!!");
+        player.gravity = -7;
         player.jumping = false;
     }
 }
@@ -65,8 +68,8 @@ function update() {
 function render() {
     gfx.clearRect(0, 0, canvas.width, canvas.height);
     gfx.beginPath();
-	gfx.arc(player.x, player.y, 32, 0, Math.PI * 2);
-	gfx.fillStyle = "#FF0";
-	gfx.fill();
+    	gfx.arc(player.x, player.y, 32, 0, Math.PI * 2);
+    	gfx.fillStyle = "#FF0";
+    	gfx.fill();
 	gfx.closePath();
 }
