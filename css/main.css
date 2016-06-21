@@ -1,0 +1,14 @@
+#gameView {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: auto;
+}
+
+#gameCanvas {
+    background: #000;
+    width: 640px;
+    height: 480px;
+    display: block;
+    margin: auto;
+}
