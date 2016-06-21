@@ -10,66 +10,81 @@ var requestAnimFrame = (function(){
         };
 })();
 
-window.onload = init;
-
 var canvas = document.getElementById("gameCanvas");
 var gfx = canvas.getContext("2d");
 
-var player = {
-    x: 100,
-    y: 100,
-    jumping: false,
-    score: 0,
-    gravity: 1,
-}
+window.onload = new cGame().init();
 
-function init() {
-    canvas.width = 640;
-    canvas.height = 480;
+function cGame() {
+    var _this = this;
 
-    console.log("Hello world!");
+    this.init = function() {
+        console.log("Hello world!");
 
-    window.onmousedown = function(e) {
-        if(e.button == 0) {
-            player.jumping = true;
-        }
+        this.player = new cPlayer();
+        this.player.init();
+
+        this.gameLoop();
     }
 
-    document.addEventListener("keydown", function(e) {
-        switch(e.keyCode) {
-            case 32: //SPACE
-            case 38:  //UP
-                player.jumping = true;
-                break;
-        }
-    });
+    this.gameLoop = function() {
+        _this.update();
+        _this.render();
 
-    gameLoop();
-}
+        requestAnimFrame(_this.gameLoop);
+    }
 
-function gameLoop() {
-    update();
-    render();
+    this.update = function() {
+        this.player.update();
+    }
 
-    requestAnimFrame(gameLoop);
-}
-
-function update() {
-    player.gravity += 0.4;
-    player.y+= player.gravity;
-
-    if(player.jumping) {
-        console.log("YOU ARE JUMPING!!!");
-        player.gravity = -7;
-        player.jumping = false;
+    this.render = function() {
+        gfx.clearRect(0, 0, canvas.width, canvas.height);
+        gfx.beginPath();
+        	this.player.render(gfx);
+    	gfx.closePath();
     }
 }
 
-function render() {
-    gfx.clearRect(0, 0, canvas.width, canvas.height);
-    gfx.beginPath();
-    	gfx.arc(player.x, player.y, 32, 0, Math.PI * 2);
-    	gfx.fillStyle = "#FF0";
-    	gfx.fill();
-	gfx.closePath();
+function cPlayer() {
+    var _this = this;
+
+    this.init = function() {
+        this.x = 100;
+        this.y = 100;
+        this.jump = false;
+        this.gravity = 1;
+
+        window.onmousedown = function(e) {
+            if(e.button == 0) {
+                _this.jump = true;
+            }
+        }
+
+        document.addEventListener("keydown", function(e) {
+            switch(e.keyCode) {
+                case 32: //SPACE
+                case 38:  //UP
+                    _this.jump = true;
+                    break
+            }
+        });
+    }
+
+    this.update = function() {
+        this.gravity += 0.3;
+        this.y+= this.gravity;
+
+        if(this.jump) {
+            console.log("YOU ARE JUMPING!!!");
+            this.gravity = -6;
+            this.jump = false;
+        }
+    }
+
+    this.render = function(gfx) {
+        gfx.arc(this.x, this.y, 32, 0, Math.PI * 2);
+        gfx.fillStyle = "#FF0";
+        gfx.fill();
+    }
 }
