@@ -6,7 +6,7 @@
 }
 
 #gameCanvas {
-    background: #000;
+    background: #ccc;
     width: 640px;
     height: 480px;
     display: block;

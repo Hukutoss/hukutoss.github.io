@@ -24,6 +24,8 @@ function cGame() {
         this.player = new cPlayer();
         this.player.init();
 
+        this.pipe = new cPipe(300, 128);
+
         this.gameLoop();
     }
 
@@ -42,6 +44,7 @@ function cGame() {
         gfx.clearRect(0, 0, canvas.width, canvas.height);
         gfx.beginPath();
             this.player.render(gfx);
+            this.pipe.render(gfx);
     	gfx.closePath();
     }
 } //cGame
@@ -63,6 +66,7 @@ function cPlayer() {
         window.onmousedown = function(e) {
             if(e.button == 0) {
                 _this.jump = true;
+                //console.log("x: " + e.layerX + ", y: " + e.layerY);
             }
         }
 
@@ -105,3 +109,41 @@ function cPlayer() {
         gfx.restore();
     }
 } //cPlayer
+
+function cPipe(_xPipe, _yPipe) {
+    this.x = _xPipe;
+    this.y = _yPipe;
+
+    this.sprite = new Image();
+    this.sprite.src = "res/pipe.png";
+
+    this.tileSize = 32;
+
+    this.update = function() {
+
+    }
+    //sprite
+    //sx sy swidth sheight
+    //x  y width height
+    this.render = function(gfx) {
+        var ts = this.tileSize;
+        var yOff = this.y + 100;
+        var yu = this.y;
+        var yd = canvas.height - yOff;
+
+        var ut = (yu >> 5) + 2;
+        var dt = (yd >> 5) + 1;
+
+        //console.log("yu: " + yu + ", yd: " + yd + ", ut: " + ut + ", dt: " + dt);
+
+        for(var i = 0; i < ut; i++) {
+            var cc = i > 0 ? 1 : 0;
+            gfx.drawImage(this.sprite, ts * cc, 0, ts, ts, this.x, yu - ts * i, ts, ts);
+        }
+
+        for(var i = 0; i < dt; i++) {
+            var cc = i > 0 ? 1 : 0;
+            gfx.drawImage(this.sprite, ts * cc, 0, ts, ts, this.x, yOff + ts * i, ts, ts);
+        }
+    }
+}
