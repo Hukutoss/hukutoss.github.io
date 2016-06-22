@@ -38,6 +38,7 @@ function cGame() {
 
     this.update = function() {
         this.player.update();
+        this.pipe.update();
     }
 
     this.render = function() {
@@ -120,14 +121,14 @@ function cPipe(_xPipe, _yPipe) {
     this.tileSize = 32;
 
     this.update = function() {
-
+        // this.x -= 1;
     }
     //sprite
     //sx sy swidth sheight
     //x  y width height
     this.render = function(gfx) {
-        var ts = this.tileSize;
-        var yOff = this.y + 100;
+        var tSize = this.tileSize;
+        var yOff = this.y + 100 + tSize;
         var yu = this.y;
         var yd = canvas.height - yOff;
 
@@ -138,12 +139,20 @@ function cPipe(_xPipe, _yPipe) {
 
         for(var i = 0; i < ut; i++) {
             var cc = i > 0 ? 1 : 0;
-            gfx.drawImage(this.sprite, ts * cc, 0, ts, ts, this.x, yu - ts * i, ts, ts);
+            gfx.drawImage(this.sprite, tSize * cc, 0, tSize, tSize, this.x, yu - tSize * i, tSize, tSize);
         }
 
         for(var i = 0; i < dt; i++) {
-            var cc = i > 0 ? 1 : 0;
-            gfx.drawImage(this.sprite, ts * cc, 0, ts, ts, this.x, yOff + ts * i, ts, ts);
+            if(i > 0) {
+                gfx.drawImage(this.sprite, tSize, 0, tSize, tSize, this.x, yOff + tSize * i, tSize, tSize);
+            } else {  //Don't ask.
+                gfx.save();
+                gfx.translate(this.x - tSize, yOff + (tSize * 2));
+                gfx.scale(-1, 1);
+                gfx.rotate(180 * Math.PI / 180);
+                gfx.drawImage(this.sprite, 0, 0, tSize, tSize, tSize, tSize, tSize, tSize);
+                gfx.restore();
+            }
         }
     }
 }
